@@ -1,5 +1,215 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model library.ViewModels.LoginViewModel
+
 @{
+    Layout = null;
+    ViewData["Title"] = "Staff Sign In";
 }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <!-- LEFT: Library Introduction -->
+        <section class="hero-section">
+
+            <div class="hero-overlay"></div>
+
+            <div class="hero-content">
+
+                <!-- Logo -->
+                <div class="brand">
+                    <div class="brand-icon">
+                        <span>♧</span>
+                    </div>
+
+                    <div class="brand-text">
+                        <div class="brand-name">JingYi</div>
+                        <div class="brand-subtitle">PUBLIC LIBRARY</div>
+                    </div>
+                </div>
+
+                <!-- Main Introduction -->
+                <div class="hero-message">
+
+                    <p class="eyebrow">
+                        THE LIBRARIAN WORKSPACE
+                    </p>
+
+                    <h1>
+                        Good books.<br />
+                        Thoughtful service.<br />
+                        One connected<br />
+                        library.
+                    </h1>
+
+                    <div class="hero-divider"></div>
+
+                    <p class="hero-description">
+                        Care for the collection, support your readers
+                        and keep every lending journey connected.
+                    </p>
+
+                </div>
+
+                <!-- Bottom Footer -->
+                <div class="hero-footer">
+                    JINGYI PUBLIC LIBRARY
+                    <span>/</span>
+                    STAFF ACCESS
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT: Login Form -->
+        <section class="login-section">
+
+            <div class="login-container">
+
+                <!-- Top Label -->
+                <div class="workspace-label">
+                    <span class="lock-icon">♙</span>
+                    SECURE STAFF WORKSPACE
+                </div>
+
+
+                <!-- Login Form -->
+                <div class="login-content">
+
+                    <header class="login-header">
+
+                        <h2>Welcome back.</h2>
+
+                        <p>
+                            Sign in with your JingYi username and password.
+                        </p>
+
+                    </header>
+
+
+                    <!-- Error Message -->
+                    @if (ViewData["LoginError"] != null)
+                    {
+                        <div class="alert alert-error" role="alert">
+                            <strong>We couldn't sign you in.</strong>
+                            <p>@ViewData["LoginError"]</p>
+                        </div>
+                    }
+
+
+                    <form asp-controller="Account"
+                          asp-action="Login"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="validation-summary">
+                        </div>
+
+
+                        <!-- Username -->
+                        <div class="form-group">
+
+                            <label asp-for="UserName">
+                                Username
+                            </label>
+
+                            <input asp-for="UserName"
+                                   class="form-input"
+                                   placeholder="Enter your username"
+                                   autocomplete="username"
+                                   maxlength="20" />
+
+                            <span asp-validation-for="UserName"
+                                  class="field-error">
+                            </span>
+
+                            <small class="field-hint">
+                                Your library account username · up to 20 characters
+                            </small>
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="form-group">
+
+                            <label asp-for="Password">
+                                Password
+                            </label>
+
+                            <input asp-for="Password"
+                                   class="form-input"
+                                   placeholder="Enter your password"
+                                   autocomplete="current-password" />
+
+                            <span asp-validation-for="Password"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Password Hint + Submit -->
+                        <div class="form-actions">
+
+                            <small class="password-hint">
+                                Passwords are case-sensitive.
+                            </small>
+
+                            <button type="submit" class="sign-in-button">
+                                Sign in <span>→</span>
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                    <!-- Account Help -->
+                    <div class="account-help">
+
+                        <p>Need access to the workspace?</p>
+
+                        <p>
+                            Ask your library administrator to create
+                            an account or reset your password.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Bottom Security Notice -->
+                <footer class="login-footer">
+                    Authorized library staff only.
+                    Keep reader information private.
+                </footer>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <partial name="_ValidationScriptsPartial" />
+
+</body>
+</html>
