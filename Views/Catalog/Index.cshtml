@@ -1,4 +1,7 @@
 ﻿@model List<library.ViewModels.Catalog.BookCardViewModel>
+@{
+    Layout = null;
+}
 <h1>The collection</h1>
 <ul>
     @foreach (var b in Model) { <li>@b.Title</li> }
