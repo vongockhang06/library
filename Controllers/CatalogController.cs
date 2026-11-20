@@ -10,9 +10,10 @@ namespace library.Controllers
         {
             _catalogService = catalogService;
         }
-        public async Task<IActionResult>  Index()
+        [HttpGet]
+        public async Task<IActionResult>  Index(string? search)
         {
-            var books = await _catalogService.GetAllBooks();
+            var books = await _catalogService.GetAllBooks(search);
             return View(books);
         }
 

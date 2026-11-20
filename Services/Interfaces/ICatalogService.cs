@@ -4,6 +4,6 @@ namespace library.Services.Interfaces
 {
     public interface ICatalogService
     {
-        Task<List<BookCardViewModel>> GetAllBooks();
+        Task<List<BookCardViewModel>> GetAllBooks(string? search);
     }
 }

@@ -2,6 +2,19 @@
 @{
     Layout = null;
 }
+<form asp-controller="Catalog"
+	  asp-action="Index"
+	  method="get"
+    >
+    <input type="text"  name="search"
+        placeholder="Search books by title, author or ISBN..." ></input>
+    <button type="submit">Search</button>
+    <button type="reset" onclick="window.location.href='@Url.Action("Index", "Catalog")'">
+         Reset
+    </button>
+</form>
+
+
 <h1>The collection</h1>
 <ul>
     @foreach (var b in Model) { <li>@b.Title</li> }
