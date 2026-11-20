@@ -1,4 +1,6 @@
 using library.Data;
+using library.Services;
+using library.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options => 
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+
+//Register Interface and Service
+builder.Services.AddScoped<ICatalogService, CatalogService>();
 
 
 var app = builder.Build();

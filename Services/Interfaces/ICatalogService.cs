@@ -1,6 +1,9 @@
-﻿namespace library.Services.Interfaces
+﻿using library.ViewModels.Catalog;
+
+namespace library.Services.Interfaces
 {
-    public class ICatalogService
+    public interface ICatalogService
     {
+        Task<List<BookCardViewModel>> GetAllBooks();
     }
 }
