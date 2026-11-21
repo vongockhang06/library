@@ -23,7 +23,7 @@ namespace library.Services
             var language = query.Language;
             var authorid = query.AuthorId;
             var categoryid = query.CategoryId;
-
+            var availability = query.Availability;
             // By Q first
             if (!q.IsNullOrEmpty())
             {
@@ -51,16 +51,39 @@ namespace library.Services
                     b.Languages == language
                 );
             }
+            // Filter by availability
+            if (availability == "Available")
+                books = books.Where(b => b.BookCopies.Any(c => c.Stat == "Available"));
+            else if (query.Availability == "Unavailable")
+                books = books.Where(b => !b.BookCopies.Any(c => c.Stat == "Available"));
 
+            // Sort
+            var option = query.Sort;
+            if (option=="Title")
+            {
+                books=books.OrderBy(b=>b.Title);
+            }
+            else if (option == "Availability")
+            {
+                books = books.OrderByDescending(b => b.BookCopies
+                                            .Count(c => c.Stat == "Available"))
+                                            .ThenBy(b => b.Title);
+            }
+            else
+            {
+                books = books.OrderBy(b => b.BookId);
+
+            }
             // Build Search Query
             var res = await books
-                .OrderBy(b => b.BookId)
                 .Select(b =>new BookCardViewModel
                 {
                     Isbn = b.Isbn,
                     Title = b.Title,
                     CoverImageURL = b.CoverImage,
-                    Authors = string.Join(", ", b.Authors.Select(a => a.AuthorName))
+                    Authors = string.Join(", ", b.Authors.Select(a => a.AuthorName)),
+                    TotalCopies = b.BookCopies.Count(),
+                    AvailableCopies = b.BookCopies.Count(c => c.Stat == "Available")
                 }).ToListAsync();
 
             // Build dropdowns

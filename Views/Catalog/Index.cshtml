@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-<form asp-controller="Catalog"
+<form id="searchForm" asp-controller="Catalog"
       asp-action="Index"
       method="get">
 
@@ -32,18 +32,31 @@
             asp-items="Model.Authors">
         <option value="">All authors</option>
     </select>
+    <select asp-for="Query.Availability">
+        <option value="">All availability</option>
+        <option value="Available">Available now</option>
+        <option value="Unavailable">All copies out</option>
+    </select>
 
 </form>
 
 <h1>The collection</h1>
 
 <ul>
+    <select asp-for="Query.Sort" form="searchForm" onchange="this.form.submit()">
+        <option value="Id">Sort: Book ID</option>
+        <option value="Title">Sort: Title A–Z</option>
+        <option value="Availability">Sort: Most available</option>
+    </select>
     @foreach (var b in Model.Books)
     {
         <li>
             <h3>@b.Isbn</h3>
             <h3>@b.Title</h3>
             <h3>@b.Authors</h3>
+            <span class="@(b.IsAvailable ? "badge-ok" : "badge-out")">
+                @b.AvailableText
+            </span>
         </li>
     }
 </ul>

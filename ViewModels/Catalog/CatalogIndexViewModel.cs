@@ -9,5 +9,6 @@ namespace library.ViewModels.Catalog
         public List<SelectListItem> Authors { get; set; } = new();
         public List<SelectListItem> Languages { get; set; } = new();
         public List<SelectListItem> Categories { get; set; } = new();
+        
     }
 }
