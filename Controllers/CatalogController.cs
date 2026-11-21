@@ -1,4 +1,5 @@
 ﻿using library.Services.Interfaces;
+using library.ViewModels.Catalog;
 using Microsoft.AspNetCore.Mvc;
 
 namespace library.Controllers
@@ -11,9 +12,9 @@ namespace library.Controllers
             _catalogService = catalogService;
         }
         [HttpGet]
-        public async Task<IActionResult>  Index(string? search)
+        public async Task<IActionResult>  Index([FromQuery]CatalogQuery query)
         {
-            var books = await _catalogService.GetAllBooks(search);
+            var books = await _catalogService.GetAllBooks(query);
             return View(books);
         }
 
