@@ -1,62 +1,86 @@
 ﻿@model library.ViewModels.Catalog.CatalogIndexViewModel
-
 @{
-    Layout = null;
+    ViewData["Title"] = "Browse books";
 }
 
-<form id="searchForm" asp-controller="Catalog"
-      asp-action="Index"
-      method="get">
+<section class="hero">
+    <p class="crumb">Guest / The collection</p>
+    <h1>Find your next good book.</h1>
+    <p class="lede">Explore the shelves. Search by title, author or ISBN, then see what's available to borrow.</p>
+</section>
 
-    <input asp-for="Query.Q"
-           placeholder="Search books by title, author or ISBN..." />
-
-    <button type="submit">Search</button>
-
-    <button type="button"
-            onclick="window.location.href='@Url.Action("Index", "Catalog")'">
-        Reset
-    </button>
-
-    <select asp-for="Query.CategoryId"
-            asp-items="Model.Categories">
-        <option value="">All categories</option>
-    </select>
-
-    <select asp-for="Query.Language"
-            asp-items="Model.Languages">
-        <option value="">All languages</option>
-    </select>
-
-    <select asp-for="Query.AuthorId"
-            asp-items="Model.Authors">
-        <option value="">All authors</option>
-    </select>
-    <select asp-for="Query.Availability">
-        <option value="">All availability</option>
-        <option value="Available">Available now</option>
-        <option value="Unavailable">All copies out</option>
-    </select>
-
+@* name="..." must match the CatalogQuery property; asp-for only preselects the saved choice *@
+<form id="searchForm" class="panel" method="get" asp-controller="Catalog" asp-action="Index" role="search">
+    <label class="field-label" for="q">Search the collection</label>
+    <div class="search-row">
+        <input id="q" name="Q" value="@Model.Query.Q" placeholder="Search title, author or ISBN" />
+        <button type="submit" class="btn btn-primary">Search books →</button>
+    </div>
+    <div class="filters">
+        <select name="CategoryId" asp-for="Query.CategoryId" asp-items="Model.Categories" aria-label="Category">
+            <option value="">All categories</option>
+        </select>
+        <select name="Language" asp-for="Query.Language" asp-items="Model.Languages" aria-label="Language">
+            <option value="">All languages</option>
+        </select>
+        <select name="Availability" asp-for="Query.Availability" aria-label="Availability">
+            <option value="">All availability</option>
+            <option value="Available">Available now</option>
+            <option value="Unavailable">All copies out</option>
+        </select>
+        <select name="AuthorId" asp-for="Query.AuthorId" asp-items="Model.Authors" aria-label="Author">
+            <option value="">All authors</option>
+        </select>
+        <a class="link-quiet" asp-action="Index">Clear filters</a>
+    </div>
 </form>
 
-<h1>The collection</h1>
-
-<ul>
-    <select asp-for="Query.Sort" form="searchForm" onchange="this.form.submit()">
+<div class="collection-head">
+    <div>
+        <h2>The collection</h2>
+        <p class="muted">@Model.Books.Count titles · @(Model.Books.Sum(b => b.TotalCopies)) physical copies</p>
+    </div>
+    <select name="Sort" asp-for="Query.Sort" form="searchForm" onchange="this.form.requestSubmit()" aria-label="Sort books">
         <option value="Id">Sort: Book ID</option>
         <option value="Title">Sort: Title A–Z</option>
-        <option value="Availability">Sort: Most available</option>
+        <option value="Available">Sort: Most available</option>
     </select>
-    @foreach (var b in Model.Books)
-    {
-        <li>
-            <h3>@b.Isbn</h3>
-            <h3>@b.Title</h3>
-            <h3>@b.Authors</h3>
-            <span class="@(b.IsAvailable ? "badge-ok" : "badge-out")">
-                @b.AvailableText
-            </span>
-        </li>
-    }
-</ul>
+</div>
+
+@if (!Model.Books.Any())
+{
+    <p class="empty">No books match your search. <a class="link" asp-action="Index">Clear filters</a> to see the whole collection.</p>
+}
+else
+{
+    <div class="grid">
+        @foreach (var book in Model.Books)
+        {
+            <partial name="_BookCard" model="book" />
+        }
+    </div>
+}
+
+<section class="band">
+    <div>
+        <h3>A place on the shelf. A place for you.</h3>
+        <p>Browse freely as a guest. Join or sign in to reserve titles and manage your reading.</p>
+    </div>
+    <a class="btn" asp-controller="Account" asp-action="SignUp">Become a member →</a>
+</section>
+
+@section Scripts {
+    <script>
+        // Keep the URL short: send only the fields the guest actually filled in.
+        const form = document.getElementById('searchForm');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const params = new URLSearchParams();
+            new FormData(form).forEach((v, k) => {
+                if (v !== '' && !(k === 'Sort' && v === 'id')) params.append(k, v);
+            });
+            const qs = params.toString();
+            location.href = form.action + (qs ? '?' + qs : '');
+        });
+    </script>
+}

@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] · JingYi Public Library</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="~/css/catalog.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" asp-controller="Catalog" asp-action="Index">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13C17 4 14 4.500 12 6zM12 6v13"/></svg>
+                </span>
+                <span><span class="brand-name">JingYi</span><span class="brand-sub">PUBLIC LIBRARY</span></span>
+            </a>
+            <nav aria-label="Main">
+                <a class="btn btn-primary" asp-controller="Catalog" asp-action="Index">Browse books</a>
+                <a class="btn" asp-controller="Account" asp-action="SignIn">Member sign in</a>
+                <a class="btn" asp-controller="Account" asp-action="SignUp">Join the library</a>
+            </nav>
+        </div>
+    </header>
+    <main class="wrap">@RenderBody()</main>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
