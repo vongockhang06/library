@@ -1,0 +1,55 @@
+﻿@* ASSUMPTION: BookDetailsViewModel as in the improved version (BookId, Authors, Categories, CoverImageUrl, IsAvailable, AvailabilityText) *@
+@model library.ViewModels.Catalog.BookDetailsViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<a class="back" asp-action="Index">← Back to the collection</a>
+
+<article class="detail">
+    <div class="cover cover-@(Model.BookId % 6)" aria-hidden="true">
+        @if (!string.IsNullOrEmpty(Model.CoverImageUrl))
+        {
+            <img src="@Model.CoverImageUrl" alt="" />
+        }
+        else
+        {
+            <span>@Model.Title</span>
+        }
+    </div>
+
+    <div>
+        <h1>@Model.Title</h1>
+        <p class="authors">@Model.Author</p>
+
+        <dl class="facts">
+            <dt>Publisher</dt>
+            <dd>@(Model.Publisher ?? "Unknown")</dd>
+            <dt>Published</dt>
+            <dd>@(Model.PublishDate?.ToString("yyyy") ?? "Unknown")</dd>
+            <dt>Categories</dt>
+            <dd>@Model.Category</dd>
+            <dt>Language</dt>
+            <dd>@(Model.Language ?? "Unknown")</dd>
+            <dt>ISBN</dt>
+            <dd>@Model.Isbn</dd>
+            <dt>Shelf</dt>
+            <dd>@(Model.Shelf ?? "No copy on the shelf right now")</dd>
+            <dt>Availability</dt>
+            <dd>
+                <span class="badge @(Model.Availability > 0 ? "badge-ok" : "badge-out")">
+                    @Model.Availability of @Model.TotalCopies available
+                </span>
+            </dd>
+        </dl>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <p class="desc">@Model.Description</p>
+        }
+
+        <div class="reserve">
+            <a class="btn btn-primary" asp-controller="Account" asp-action="SignIn" asp-route-returnUrl="@Context.Request.Path">Sign in to reserve</a>
+        </div>
+    </div>
+</article>

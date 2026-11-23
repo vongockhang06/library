@@ -18,5 +18,12 @@ namespace library.Controllers
             return View(books);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> BookDetails(int id)
+        {
+            var bookdetails = await _catalogService.GetBookDetails(id);
+            if (bookdetails == null) return NotFound();
+            return View(bookdetails);
+        }
     }
 }
