@@ -1,0 +1,62 @@
+﻿@model library.ViewModels.Catalog.CatalogIndexViewModel
+
+@{
+    Layout = null;
+}
+
+<form id="searchForm" asp-controller="Catalog"
+      asp-action="Index"
+      method="get">
+
+    <input asp-for="Query.Q"
+           placeholder="Search books by title, author or ISBN..." />
+
+    <button type="submit">Search</button>
+
+    <button type="button"
+            onclick="window.location.href='@Url.Action("Index", "Catalog")'">
+        Reset
+    </button>
+
+    <select asp-for="Query.CategoryId"
+            asp-items="Model.Categories">
+        <option value="">All categories</option>
+    </select>
+
+    <select asp-for="Query.Language"
+            asp-items="Model.Languages">
+        <option value="">All languages</option>
+    </select>
+
+    <select asp-for="Query.AuthorId"
+            asp-items="Model.Authors">
+        <option value="">All authors</option>
+    </select>
+    <select asp-for="Query.Availability">
+        <option value="">All availability</option>
+        <option value="Available">Available now</option>
+        <option value="Unavailable">All copies out</option>
+    </select>
+
+</form>
+
+<h1>The collection</h1>
+
+<ul>
+    <select asp-for="Query.Sort" form="searchForm" onchange="this.form.submit()">
+        <option value="Id">Sort: Book ID</option>
+        <option value="Title">Sort: Title A–Z</option>
+        <option value="Availability">Sort: Most available</option>
+    </select>
+    @foreach (var b in Model.Books)
+    {
+        <li>
+            <h3>@b.Isbn</h3>
+            <h3>@b.Title</h3>
+            <h3>@b.Authors</h3>
+            <span class="@(b.IsAvailable ? "badge-ok" : "badge-out")">
+                @b.AvailableText
+            </span>
+        </li>
+    }
+</ul>

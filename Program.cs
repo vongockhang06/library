@@ -1,7 +1,20 @@
+using library.Data;
+using library.Services;
+using library.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<AppDbContext>(options => 
+	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+
+//Register Interface and Service
+builder.Services.AddScoped<ICatalogService, CatalogService>();
+
 
 var app = builder.Build();
 
@@ -22,6 +35,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+	pattern: "{controller=Catalog}/{action=Index}");
 
 app.Run();
