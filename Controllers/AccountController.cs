@@ -4,9 +4,14 @@ namespace library.Controllers
 {
 	public class AccountController : Controller
 	{
-		public IActionResult Login()
+		public IActionResult SignIn()
 		{
 			return View();
 		}
+
+		public IActionResult SignUp()
+        {
+            return View();
+        }
 	}
 }

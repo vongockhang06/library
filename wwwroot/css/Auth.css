@@ -1,0 +1,291 @@
+﻿/* Put a photo at wwwroot/images/library-hero.jpg; without it the green gradient shows. */
+:root {
+    --panel: #f3f2ec;
+    --field: #fffdf8;
+    --line: #e3e0d3;
+    --ink: #26302a;
+    --muted: #6b726b;
+    --green: #245a42;
+    --green-2: #1c4733;
+    --err: #a33a2a;
+    --serif: "Lora",Georgia,serif;
+    --sans: "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    font: 14px/1.5 var(--sans);
+    color: var(--ink);
+    background: var(--panel)
+}
+
+a {
+    color: var(--green)
+}
+
+:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px
+}
+
+.auth {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh
+}
+
+/* left art panel */
+.auth-art {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px 40px;
+    color: #fff;
+    background: linear-gradient(180deg,rgba(17,40,29,.82),rgba(17,40,29,.9)),url('../images/library-hero.jpg') center/cover,#1d3a2c
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #fff
+}
+
+.brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #fffdf8;
+    display: grid;
+    place-items: center
+}
+
+.brand-name {
+    display: block;
+    font: 500 18px/1 var(--serif)
+}
+
+.brand-sub {
+    font-size: 8px;
+    letter-spacing: .1em;
+    opacity: .8
+}
+
+.art-copy {
+    max-width: 430px
+}
+
+.eyebrow {
+    margin: 0 0 14px;
+    font-size: 10px;
+    letter-spacing: .08em;
+    opacity: .8
+}
+
+.art-copy h2 {
+    margin: 0;
+    font: 500 44px/1.12 var(--serif)
+}
+
+.rule {
+    width: 48px;
+    border: 0;
+    border-top: 1px solid rgba(255,255,255,.7);
+    margin: 22px 0 14px
+}
+
+.art-copy p:last-child {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: .9;
+    max-width: 360px
+}
+
+.art-foot {
+    margin: 0;
+    font-size: 9px;
+    letter-spacing: .08em;
+    opacity: .75
+}
+
+/* right form panel */
+.auth-main {
+    display: flex;
+    flex-direction: column;
+    padding: 28px 56px;
+    min-width: 0
+}
+
+.auth-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    color: var(--green)
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 380px;
+    margin: auto
+}
+
+    .auth-card h1 {
+        margin: 0 0 10px;
+        font: 500 32px/1.15 var(--serif)
+    }
+
+.lede {
+    margin: 0 0 24px;
+    font-size: 12px;
+    color: var(--muted)
+}
+
+.field {
+    margin-bottom: 16px
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600
+}
+
+.hint {
+    font-weight: 400;
+    color: var(--muted)
+}
+
+input {
+    width: 100%;
+    padding: 11px 12px;
+    font: 13px var(--sans);
+    color: var(--ink);
+    background: var(--field);
+    border: 1px solid var(--line);
+    border-radius: 6px
+}
+
+    input::placeholder {
+        color: #a3a89f
+    }
+
+    input.input-validation-error {
+        border-color: var(--err)
+    }
+
+.pw {
+    position: relative
+}
+
+    .pw input {
+        padding-right: 42px
+    }
+
+.pw-toggle {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 6px
+}
+
+    .pw-toggle[aria-pressed="true"] {
+        color: var(--green)
+    }
+
+.field-error {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    color: var(--err)
+}
+
+.form-alert {
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--err);
+    background: #f8e9e5;
+    border: 1px solid #ecc9c1;
+    border-radius: 6px
+}
+
+    .form-alert.validation-summary-valid {
+        display: none
+    }
+
+    .form-alert ul {
+        margin: 0;
+        padding-left: 16px
+    }
+
+.forgot {
+    display: block;
+    margin: -6px 0 16px;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 600
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    font: 600 13px var(--sans);
+    color: #fff;
+    background: var(--green);
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer
+}
+
+    .btn-primary:hover {
+        background: var(--green-2)
+    }
+
+.alt {
+    margin: 16px 0 0;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted)
+}
+
+    .alt a {
+        font-weight: 600
+    }
+
+.legal {
+    margin: 24px 0 0;
+    font-size: 10px;
+    color: var(--muted)
+}
+
+@media(max-width:860px) {
+    .auth {
+        grid-template-columns: 1fr
+    }
+
+    .auth-art {
+        display: none
+    }
+
+    .auth-main {
+        padding: 24px
+    }
+}
