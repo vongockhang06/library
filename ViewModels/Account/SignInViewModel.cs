@@ -9,7 +9,7 @@ namespace library.ViewModels.Account
         [Required(ErrorMessage = "Enter your password")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
-        public string ReturnUrl { get; set; } = "";
+        public string? ReturnUrl { get; set; }
 
     }
 }

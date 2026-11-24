@@ -1,6 +1,9 @@
 using library.Data;
+using library.Models;
 using library.Services;
 using library.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +17,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //Register Interface and Service
 builder.Services.AddScoped<ICatalogService, CatalogService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/SignIn";
+		options.ExpireTimeSpan = TimeSpan.FromHours(8);
+		options.Cookie.HttpOnly = true; //prevent javascript access to the cookie
+		options.SlidingExpiration = true; //reset the expiration time if the user is active
+		options.Cookie.SameSite= SameSiteMode.Lax; //prevent cross-site request forgery
+    });
 
 var app = builder.Build();
 
@@ -30,7 +44,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

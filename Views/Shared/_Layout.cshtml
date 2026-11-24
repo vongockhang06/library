@@ -21,6 +21,13 @@
                 <a class="btn" asp-controller="Account" asp-action="SignIn">Member sign in</a>
                 <a class="btn" asp-controller="Account" asp-action="SignUp">Join the library</a>
             </nav>
+            <small>auth: @User.Identity?.IsAuthenticated | name: @User.Identity?.Name</small>
+            @if (User.Identity?.IsAuthenticated ?? false)
+			{
+				<form method="post" asp-controller="Account" asp-action="LogOut">
+					<button type="submit" class="btn btn-quiet">Sign out</button>
+				</form>
+			}
         </div>
     </header>
     <main class="wrap">@RenderBody()</main>
