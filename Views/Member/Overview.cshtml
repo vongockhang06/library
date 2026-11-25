@@ -1,0 +1,85 @@
+﻿@using System.Globalization
+@model library.ViewModels.Member.OverviewViewModel
+@{
+    ViewData["Title"] = "Overview";
+    ViewData["Crumb"] = "Overview";
+
+    var hour = DateTime.Now.Hour;
+    var greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    var firstName = Model.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? "";
+
+    var overdue = Model.Loans.FirstOrDefault(l => l.IsOverdue);
+    string DueText(DateTime d) => d.Date == DateTime.Today
+        ? $"today at {d:HH:mm}"
+        : "on " + d.ToString("dd MMM yyyy 'at' HH:mm", CultureInfo.InvariantCulture);
+}
+
+<p class="eyebrow">MEMBER / MY LIBRARY</p>
+<h1>@greeting, @firstName.</h1>
+<p class="lede">Here are your current loans and the next action to take.</p>
+
+<section class="stats">
+    <div class="card stat">
+        <p>Active loans</p>
+        <strong>@Model.ActiveLoans</strong>
+        <a asp-action="MyLoans">View all loans →</a>
+    </div>
+    <div class="card stat">
+        <p>Overdue loans</p>
+        <strong class="@(Model.OverdueLoans > 0 ? "bad" : "")">@Model.OverdueLoans</strong>
+        <a class="@(Model.OverdueLoans > 0 ? "bad" : "")" asp-action="MyLoans">Review due dates →</a>
+    </div>
+    <div class="card stat">
+        <p>Current reservations</p>
+        <strong>@Model.ActiveReservations</strong>
+        <a asp-controller="Catalog" asp-action="Index">Explore the collection →</a>
+    </div>
+</section>
+
+@if (overdue != null)
+{
+    <div class="notice" role="status">
+        @overdue.BookTitle was due @DueText(overdue.DueAt). Please bring it to the library desk or ask the library about renewal eligibility.
+    </div>
+}
+
+<section class="card shelf">
+    <h2>On your reading shelf</h2>
+    <p class="muted">
+        @Model.Loans.Count active @(Model.Loans.Count == 1 ? "loan" : "loans")
+        @if (Model.Loans.All(l => l.RenewalsUsed == 0))
+        {
+            <text> · All renewal counts are currently 0</text>
+        }
+    </p>
+
+    @if (!Model.Loans.Any())
+    {
+        <p class="empty">You have no active loans. <a asp-controller="Catalog" asp-action="Index">Browse the catalog</a> to find your next book.</p>
+    }
+    else
+    {
+        @foreach (var loan in Model.Loans)
+        {
+            <article class="loan">
+                <span class="cover cover-@(loan.BookId % 6)" aria-hidden="true">
+                    @if (!string.IsNullOrEmpty(loan.CoverImage))
+                    {
+                        <img src="~/images/covers/@loan.CoverImage" alt="" loading="lazy" />
+                    }
+                    else
+                    {
+                        <span>@loan.BookTitle</span>
+                    }
+                </span>
+                <div>
+                    <h3><a asp-controller="Catalog" asp-action="BookDetails" asp-route-id="@loan.BookId">@loan.BookTitle</a></h3>
+                    <p class="muted">Loan @loan.LoanId · Copy @loan.CopyId</p>
+                    <span class="chip @(loan.IsOverdue ? "chip-bad" : "chip-ok")">@loan.DueLabel</span>
+                    <p class="muted">Renewals used: @loan.RenewalsUsed · <a asp-action="MyLoans">View loan →</a></p>
+                </div>
+            </article>
+        }
+        <a class="btn" asp-action="MyLoans">My loans &amp; renewals →</a>
+    }
+</section>

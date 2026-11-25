@@ -1,0 +1,76 @@
+﻿@using System.Security.Claims
+@model library.ViewModels.Catalog.CatalogIndexViewModel
+@{
+    Layout = "_MemberLayout";
+    ViewData["Title"] = "Catalog";
+    ViewData["Crumb"] = "Catalog";
+    var fullName = User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "Member";
+    var memberId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/member-catalog.css" asp-append-version="true" />
+}
+
+<p class="eyebrow">MEMBER / CATALOG</p>
+<h1>Find your next good book.</h1>
+<p class="lede">Search by title, author or ISBN, then open a book to reserve it.</p>
+
+<form id="searchForm" class="card search-panel" method="get" asp-controller="Catalog" asp-action="Index" role="search">
+    <label class="field-label" for="q">Search the collection</label>
+    <div class="search-row">
+        <input id="q" name="Q" value="@Model.Query.Q" placeholder="Search title, author or ISBN" />
+        <button type="submit" class="btn btn-primary">Search books →</button>
+    </div>
+    <div class="filters">
+        <select name="CategoryId" asp-for="Query.CategoryId" asp-items="Model.Categories" aria-label="Category"><option value="">All categories</option></select>
+        <select name="Language" asp-for="Query.Language" asp-items="Model.Languages" aria-label="Language"><option value="">All languages</option></select>
+        <select name="Availability" asp-for="Query.Availability" aria-label="Availability">
+            <option value="">All availability</option>
+            <option value="Available">Available now</option>
+            <option value="Unavailable">All copies out</option>
+        </select>
+        <select name="AuthorId" asp-for="Query.AuthorId" asp-items="Model.Authors" aria-label="Author"><option value="">All authors</option></select>
+        <a class="link-quiet" asp-action="Index">Clear filters</a>
+    </div>
+</form>
+
+<div class="coll-head">
+    <div>
+        <h2>The collection</h2>
+        <p class="muted">@Model.Books.Count titles · @(Model.Books.Sum(b => b.TotalCopies)) physical copies</p>
+    </div>
+    @* ASSUMPTION: these values match your service's sort options *@
+    <select name="Sort" asp-for="Query.Sort" form="searchForm" onchange="this.form.requestSubmit()" aria-label="Sort books">
+        <option value="">Sort: Book ID</option>
+        <option value="Title">Sort: Title A–Z</option>
+        <option value="Availability">Sort: Most available</option>
+    </select>
+</div>
+
+@if (!Model.Books.Any())
+{
+    <p class="empty card">No books match your search. <a asp-action="Index">Clear filters</a> to see the whole collection.</p>
+}
+else
+{
+    <div class="tiles">
+        @foreach (var book in Model.Books)
+        {
+            <partial name="_MemberBookCard" model="book" />
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // keep the URL short: send only the fields that were filled in
+        const form = document.getElementById('searchForm');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const params = new URLSearchParams();
+            new FormData(form).forEach((v, k) => { if (v !== '') params.append(k, v); });
+            const qs = params.toString();
+            location.href = form.action + (qs ? '?' + qs : '');
+        });
+    </script>
+}

@@ -115,7 +115,8 @@ namespace library.Services
                     Author = string.Join(" · ", b.Authors.Select(a => a.AuthorName)),
                     Category = string.Join(" · ", b.Categories.Select(c => c.CategoryName)),
                     TotalCopies = b.BookCopies.Count(),
-                    Availability = b.BookCopies.Count(c => c.Stat == "Available")
+                    Availability = b.BookCopies.Count(c => c.Stat == "Available"),
+                    Edition = b.Edition
                 })
                 .FirstOrDefaultAsync();
             return bookdetails;

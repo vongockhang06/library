@@ -17,6 +17,7 @@
         public string Author { get; set; } = "";
         public string Category { get; set; } ="";
         public string? CoverImageUrl { get; set; }
+        public short Edition { get; set; }
 
     }
 }

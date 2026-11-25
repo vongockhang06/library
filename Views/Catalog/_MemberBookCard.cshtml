@@ -1,0 +1,22 @@
+﻿@model library.ViewModels.Catalog.BookCardViewModel
+
+<article class="tile">
+    <a class="cover cover-@(Model.BookId % 6)" asp-controller="Catalog" asp-action="BookDetails" asp-route-id="@Model.BookId" tabindex="-1" aria-hidden="true">
+        @if (!string.IsNullOrEmpty(Model.CoverImageURL))
+        {
+            <img src="~/images/covers/@Model.CoverImageURL" alt="" loading="lazy" />
+        }
+        else
+        {
+            <span>@Model.Title</span>
+        }
+    </a>
+    <div class="tile-body">
+        <h3><a asp-controller="Catalog" asp-action="BookDetails" asp-route-id="@Model.BookId">@Model.Title</a></h3>
+        <p class="tile-authors">@Model.Authors</p>
+        <p class="muted">@Model.Categories</p>
+        <p class="muted">ISBN @Model.Isbn</p>
+        <span class="badge @(Model.IsAvailable ? "badge-ok" : "badge-out")">@Model.AvailableText</span>
+        <a class="tile-link" asp-controller="Catalog" asp-action="BookDetails" asp-route-id="@Model.BookId">View book →</a>
+    </div>
+</article>

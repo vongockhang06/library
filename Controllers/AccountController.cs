@@ -50,7 +50,7 @@ namespace library.Controllers
 		public async Task<IActionResult> LogOut()
 		{
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-			return RedirectToAction("Index", "Catalog");
+			return RedirectToAction("Overview", "Member");
 		}
 		public IActionResult SignUp()
         {

@@ -1,0 +1,513 @@
+﻿:root {
+    --bg: #f2f2ec;
+    --panel: #fffefa;
+    --side: #ecece5;
+    --line: #e3e0d3;
+    --ink: #26302a;
+    --muted: #6b726b;
+    --green: #245a42;
+    --green-2: #1c4733;
+    --bad: #a33a2a;
+    --bad-bg: #f6e3de;
+    --ok-bg: #dde9de;
+    --ok-ink: #2f6a4a;
+    --warn-bg: #f3e9d2;
+    --warn-ink: #7d5f22;
+    --serif: "Lora",Georgia,serif;
+    --sans: "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.5 var(--sans)
+}
+
+a {
+    color: var(--green);
+    text-decoration: none
+}
+
+    a:hover {
+        text-decoration: underline
+    }
+
+:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px
+}
+
+h1, h2, h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    margin: 0
+}
+
+.portal {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    min-height: 100vh
+}
+
+/* sidebar */
+.side {
+    background: var(--side);
+    border-right: 1px solid var(--line);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    padding: 0 4px 18px
+}
+
+    .brand:hover {
+        text-decoration: none
+    }
+
+.brand-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--green);
+    display: grid;
+    place-items: center
+}
+
+    .brand-mark svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: #fff;
+        stroke-width: 1.8
+    }
+
+.brand-name {
+    display: block;
+    font: 500 17px/1 var(--serif)
+}
+
+.brand-sub {
+    font-size: 8px;
+    letter-spacing: .1em;
+    color: var(--muted)
+}
+
+.side-label {
+    margin: 6px 6px 8px;
+    font-size: 9px;
+    letter-spacing: .08em;
+    color: var(--muted)
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--ink)
+}
+
+    .nav-item:hover {
+        background: #e2e3da;
+        text-decoration: none
+    }
+
+    .nav-item.active {
+        background: var(--green);
+        color: #fff;
+        font-weight: 500
+    }
+
+    .nav-item svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.7
+    }
+
+.side-user {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 4px 0;
+    border-top: 1px solid var(--line);
+    font-size: 11px
+}
+
+    .side-user strong {
+        display: block;
+        font-size: 11px
+    }
+
+    .side-user small {
+        display: block;
+        color: var(--muted);
+        font-size: 9px
+    }
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #d5e0d3;
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    font-weight: 600;
+    flex: none
+}
+
+.linkbtn {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 9px;
+    color: var(--green);
+    cursor: pointer
+}
+
+.side-user form {
+    margin: 0
+}
+
+/* main frame */
+.main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 14px 28px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    font-size: 11px;
+    color: var(--muted)
+}
+
+    .topbar p {
+        margin: 0
+    }
+
+.topbar-right {
+    display: flex;
+    gap: 14px
+}
+
+    .topbar-right b {
+        font-weight: 500;
+        color: var(--green);
+        padding-left: 14px;
+        border-left: 1px solid var(--line)
+    }
+
+.content {
+    flex: 1;
+    width: 100%;
+    max-width: 860px;
+    padding: 26px 28px 40px
+}
+
+.foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 14px 28px;
+    margin: 0 28px;
+    border-top: 1px solid var(--line);
+    font-size: 10px;
+    color: var(--green)
+}
+
+/* page content */
+.eyebrow {
+    margin: 0 0 8px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    color: var(--green)
+}
+
+.content h1 {
+    font-size: 30px;
+    line-height: 1.2
+}
+
+.lede {
+    margin: 8px 0 20px;
+    font-size: 12px;
+    color: var(--muted)
+}
+
+.muted {
+    margin: 4px 0;
+    font-size: 11px;
+    color: var(--muted)
+}
+
+.small {
+    font-size: 10px
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 14px;
+    margin-bottom: 16px
+}
+
+.stat p {
+    margin: 0 0 6px;
+    font-size: 11px;
+    color: var(--muted)
+}
+
+.stat strong {
+    display: block;
+    font: 500 30px/1.1 var(--serif);
+    margin-bottom: 8px
+}
+
+.stat a {
+    font-size: 10px;
+    font-weight: 500
+}
+
+.bad {
+    color: var(--bad)
+}
+
+.notice {
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    font-size: 11px;
+    color: var(--warn-ink);
+    background: var(--warn-bg);
+    border-radius: 6px
+}
+
+.shelf h2 {
+    font-size: 20px
+}
+
+.loan {
+    display: flex;
+    gap: 16px;
+    padding: 14px 0
+}
+
+.cover {
+    flex: none;
+    width: 62px;
+    height: 96px;
+    border-radius: 3px;
+    display: flex;
+    padding: 8px 6px;
+    overflow: hidden;
+    background: var(--c,#245a42);
+    color: #fff;
+    font: 500 10px/1.2 var(--serif);
+    box-shadow: 0 1px 2px rgba(0,0,0,.18)
+}
+
+    .cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        margin: -8px -6px
+    }
+
+.cover-0 {
+    --c: #245a42
+}
+
+.cover-1 {
+    --c: #7a6144
+}
+
+.cover-2 {
+    --c: #5a7a78
+}
+
+.cover-3 {
+    --c: #a0674a
+}
+
+.cover-4 {
+    --c: #7f8a4a
+}
+
+.cover-5 {
+    --c: #6f7a8c
+}
+
+.loan h3 {
+    font-size: 18px
+}
+
+    .loan h3 a {
+        color: var(--ink)
+    }
+
+.chip {
+    display: inline-block;
+    margin: 6px 0 4px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500
+}
+
+.chip-bad {
+    background: var(--bad-bg);
+    color: var(--bad)
+}
+
+.chip-ok {
+    background: var(--ok-bg);
+    color: var(--ok-ink)
+}
+
+.btn {
+    display: inline-block;
+    padding: 9px 14px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel);
+    font: 600 12px var(--sans);
+    color: var(--ink)
+}
+
+    .btn:hover {
+        border-color: var(--green);
+        text-decoration: none
+    }
+
+.btn-primary {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff
+}
+
+    .btn-primary:hover {
+        background: var(--green-2)
+    }
+
+.empty {
+    padding: 22px 0;
+    color: var(--muted)
+}
+
+/* my loans table */
+.table-wrap {
+    overflow-x: auto;
+    margin-top: 14px
+}
+
+.loans {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    min-width: 560px
+}
+
+    .loans th {
+        padding: 10px 14px;
+        text-align: left;
+        background: var(--side);
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: var(--muted)
+    }
+
+    .loans td {
+        padding: 14px;
+        vertical-align: top;
+        border-bottom: 1px solid var(--line)
+    }
+
+.book-link {
+    font-weight: 600
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 16px 0 10px
+}
+
+@media(max-width:860px) {
+    .portal {
+        grid-template-columns: 1fr
+    }
+
+    .side {
+        border-right: 0;
+        border-bottom: 1px solid var(--line)
+    }
+
+    nav {
+        flex-direction: row;
+        flex-wrap: wrap
+    }
+
+    .side-label {
+        display: none
+    }
+
+    .side-user {
+        margin-top: 12px
+    }
+
+    .stats {
+        grid-template-columns: 1fr
+    }
+
+    .content, .topbar {
+        padding-left: 18px;
+        padding-right: 18px
+    }
+
+    .foot {
+        margin: 0 18px
+    }
+}

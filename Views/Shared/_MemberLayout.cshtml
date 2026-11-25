@@ -1,0 +1,63 @@
+﻿@using System.Globalization
+@using System.Security.Claims
+@{
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    string Cls(params string[] names) => names.Contains(action) ? "nav-item active" : "nav-item";
+
+    // ASSUMPTION: add a "FullName" claim at sign-in; falls back to the username
+    var fullName = User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "Member";
+    var memberId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var initials = string.Concat(fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(p => char.ToUpper(p[0])));
+    var now = DateTime.Now;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] · JingYi Public Library</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="~/css/member.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <div class="portal">
+        <aside class="side">
+            <a class="brand" asp-controller="Member" asp-action="Overview">
+                <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13C17 4 14 4.5 12 6zM12 6v13" /></svg></span>
+                <span><span class="brand-name">JingYi</span><span class="brand-sub">PUBLIC LIBRARY</span></span>
+            </a>
+            <p class="side-label">MEMBER PORTAL</p>
+            <nav aria-label="Member">
+                <a class="@Cls("Overview")" asp-controller="Member" asp-action="Overview"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1" /><rect x="13" y="4" width="7" height="7" rx="1" /><rect x="4" y="13" width="7" height="7" rx="1" /><rect x="13" y="13" width="7" height="7" rx="1" /></svg>Overview</a>
+                <a class="nav-item" asp-controller="Catalog" asp-action="Index"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13C17 4 14 4.5 12 6zM12 6v13" /></svg>Catalog</a>
+                <a class="@Cls("MyLoans")" asp-controller="Member" asp-action="MyLoans"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13C17 4 14 4.5 12 6zM12 6v13" /></svg>My loans</a>
+                <a class="@Cls("Reservations")" asp-controller="Member" asp-action="Reservations"><svg viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z" /></svg>My reservations</a>
+                <a class="@Cls("Account")" asp-controller="Member" asp-action="Account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>My account</a>
+                <a class="@Cls("History")" asp-controller="Member" asp-action="History"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>Borrowing history</a>
+            </nav>
+            <div class="side-user">
+                <span class="avatar" aria-hidden="true">@initials</span>
+                <div>
+                    <strong>@fullName</strong>
+                    <small>Member @memberId · Active</small>
+                    <form asp-controller="Account" asp-action="Logout" method="post"><button type="submit" class="linkbtn">Sign out</button></form>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main">
+            <header class="topbar">
+                <p>Member portal / @ViewData["Crumb"]</p>
+                <p class="topbar-right"><span>@now.ToString("dddd, dd MMMM yyyy · HH:mm", CultureInfo.InvariantCulture)</span><b>@initials · Member session</b></p>
+            </header>
+            <main class="content">@RenderBody()</main>
+            <footer class="foot">
+                <span>JingYi Public Library · Member portal</span>
+                <span>@now.ToString("dd MMM yyyy · HH:mm", CultureInfo.InvariantCulture) · Library local time</span>
+            </footer>
+        </div>
+    </div>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

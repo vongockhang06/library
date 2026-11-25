@@ -1,0 +1,54 @@
+﻿@using System.Globalization
+@model library.ViewModels.Member.MyLoansViewModel
+@{
+    ViewData["Title"] = "My loans";
+    ViewData["Crumb"] = "My loans";
+    var ci = CultureInfo.InvariantCulture;
+}
+
+<p class="eyebrow">MEMBER / MY LOANS</p>
+<h1>A little more time to read.</h1>
+<p class="lede">Your @Model.Loans.Count active @(Model.Loans.Count == 1 ? "loan" : "loans"). Review due dates and renewal usage before requesting more time.</p>
+
+<section class="card shelf">
+    <h2>Currently borrowed</h2>
+    <p class="muted">@Model.FullName · Member @Model.MemberId · Current snapshot, @DateTime.Now.ToString("dd MMM yyyy 'at' HH:mm", ci)</p>
+
+    @if (!Model.Loans.Any())
+    {
+        <p class="empty">You have no active loans. <a asp-controller="Catalog" asp-action="Index">Browse the catalog</a> to find your next book.</p>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="loans">
+                <thead>
+                    <tr><th>Book / loan / copy</th><th>Borrowed</th><th>Due</th><th>Renewals used</th><th>Current state</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var loan in Model.Loans)
+                    {
+                        <tr>
+                            <td>
+                                <a class="book-link" asp-controller="Catalog" asp-action="BookDetails" asp-route-id="@loan.BookId">@loan.BookTitle</a><br />
+                                <a class="book-link" asp-action="Renewal" asp-route-id="@loan.LoanId">Loan @loan.LoanId · Copy @loan.CopyId</a>
+                            </td>
+                            <td>@loan.BorrowedAt.ToString("dd MMM yyyy", ci)<br />@loan.BorrowedAt.ToString("HH:mm", ci)</td>
+                            <td>@loan.DueAt.ToString("dd MMM yyyy", ci)<br />@loan.DueAt.ToString("HH:mm", ci)</td>
+                            <td>@loan.RenewalsUsed of @loan.MaxRenewals</td>
+                            <td class="@(loan.IsOverdue ? "bad" : "")">@(loan.IsOverdue ? "Overdue" : "Active")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            @foreach (var loan in Model.Loans)
+            {
+                <a class="btn @(loan.IsOverdue ? "" : "btn-primary")" asp-action="Renewal" asp-route-id="@loan.LoanId">Check renewal · Loan @loan.LoanId@(loan.IsOverdue ? "" : " →")</a>
+            }
+        </div>
+        <p class="muted small">Loans stay active until staff process the return. Bring books to the library desk for staff to process borrowing and returns.</p>
+    }
+</section>

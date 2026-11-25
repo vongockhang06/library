@@ -1,0 +1,222 @@
+﻿/* loaded after member.css; reuses its variables, .card, .cover, .loans, .btn, .muted */
+.badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500
+}
+
+.badge-ok {
+    background: var(--ok-bg);
+    color: var(--ok-ink)
+}
+
+.badge-out {
+    background: var(--warn-bg);
+    color: var(--warn-ink)
+}
+
+/* catalog */
+.search-panel {
+    margin-bottom: 8px
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600
+}
+
+.search-row {
+    display: flex;
+    gap: 10px
+}
+
+.search-panel input, .filters select, .coll-head select {
+    font: 13px var(--sans);
+    color: var(--ink);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 9px 11px
+}
+
+.search-row input {
+    flex: 1;
+    min-width: 0
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px
+}
+
+    .filters select, .coll-head select {
+        color: var(--green);
+        font-weight: 500;
+        font-size: 12px
+    }
+
+.link-quiet {
+    font-size: 11px
+}
+
+.coll-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 26px 0 14px
+}
+
+    .coll-head h2 {
+        font-size: 22px
+    }
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+    gap: 14px
+}
+
+.tile {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px
+}
+
+.tile-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px
+}
+
+.tile h3 {
+    font-size: 16px;
+    line-height: 1.25
+}
+
+    .tile h3 a {
+        color: var(--ink)
+    }
+
+.tile-authors {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--green)
+}
+
+.tile .badge {
+    margin: 8px 0 4px
+}
+
+.tile-link {
+    font-size: 11px;
+    font-weight: 500
+}
+
+@media(max-width:620px) {
+    .search-row {
+        flex-direction: column
+    }
+}
+
+/* details */
+.dgrid {
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: start
+}
+
+.dcard {
+    display: flex;
+    gap: 18px
+}
+
+.dcover {
+    width: 120px;
+    height: 186px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px 10px;
+    font-size: 15px;
+    line-height: 1.2
+}
+
+    .dcover small {
+        font: 400 8px var(--sans);
+        opacity: .85;
+        text-transform: uppercase
+    }
+
+.dinfo {
+    min-width: 0
+}
+
+.facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+    margin: 0 0 12px;
+    font-size: 12px
+}
+
+    .facts dt {
+        grid-column: 1/-1;
+        margin: 0;
+        font-size: 9px;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        color: var(--muted)
+    }
+
+    .facts dd {
+        grid-column: 1/-1;
+        margin: -8px 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 10px
+    }
+
+.desc {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--muted)
+}
+
+.reserve-card h2 {
+    font-size: 18px;
+    margin-bottom: 12px
+}
+
+.reserve-card .badge {
+    margin-bottom: 14px
+}
+
+.reserve-card form {
+    margin-top: 12px
+}
+
+@media(max-width:760px) {
+    .dgrid {
+        grid-template-columns: 1fr
+    }
+
+    .dcard {
+        flex-direction: column
+    }
+}

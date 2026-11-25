@@ -7,7 +7,8 @@ namespace library.Controllers
     public class CatalogController : Controller
     {
         private readonly ICatalogService _catalogService;
-        public CatalogController(ICatalogService catalogService)
+		private bool IsMember => User.Identity?.IsAuthenticated == true;
+		public CatalogController(ICatalogService catalogService)
         {
             _catalogService = catalogService;
         }
@@ -15,7 +16,7 @@ namespace library.Controllers
         public async Task<IActionResult>  Index([FromQuery]CatalogQuery query)
         {
             var books = await _catalogService.GetAllBooks(query);
-            return View(books);
+            return View(IsMember? "MemberIndex" :"Index",books);
         }
 
         [HttpGet]
@@ -23,7 +24,7 @@ namespace library.Controllers
         {
             var bookdetails = await _catalogService.GetBookDetails(id);
             if (bookdetails == null) return NotFound();
-            return View(bookdetails);
+            return View(IsMember ? "MemberBookDetails" : "BookDetails", bookdetails);
         }
     }
 }

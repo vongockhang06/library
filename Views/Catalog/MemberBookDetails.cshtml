@@ -1,0 +1,76 @@
+﻿@using System.Security.Claims
+@model library.ViewModels.Catalog.BookDetailsViewModel
+@{
+    var FullName = User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "Member";
+    var MemberId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var roleId = User.FindFirstValue(ClaimTypes.Role);
+    Layout = "_MemberLayout";
+    ViewData["Title"] = Model.Title;
+    ViewData["Crumb"] = $"My reservations / Book {Model.BookId}";
+    var copyWord = Model.TotalCopies == 1 ? "copy" : "copies";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/member-catalog.css" asp-append-version="true" />
+}
+
+<p class="eyebrow">MEMBER / MY RESERVATIONS / BOOK @Model.BookId</p>
+<h1>@Model.Title</h1>
+<p class="lede"><a asp-action="Index">← Back to the collection</a> · Signed in as @FullName</p>
+
+<div class="dgrid">
+    <section class="card dcard">
+        <span class="cover dcover cover-@(Model.BookId % 6)" aria-hidden="true">
+            @if (!string.IsNullOrEmpty(Model.CoverImageUrl))
+            {
+                <img src="@Model.CoverImageUrl" alt="" />
+            }
+            else
+            {
+                <span>@Model.Title</span>
+
+                <small>@Model.Author</small>
+            }
+        </span>
+        <div class="dinfo">
+            <dl class="facts">
+                <dt>Author</dt>
+                <dd>@Model.Author</dd>
+                <dt>Publisher</dt>
+                <dd>@(string.IsNullOrWhiteSpace(Model.Publisher) ? "Unknown" : Model.Publisher)</dd>
+                <dt>Categories</dt>
+                <dd>@Model.Category</dd>
+                <dt>ISBN</dt>
+                <dd>@Model.Isbn</dd>
+                <dt>Language / edition</dt>
+                <dd>@(string.IsNullOrWhiteSpace(Model.Language) ? "Unknown" : Model.Language)@(Model.Edition > 0 ? $" · Edition {Model.Edition}" : "")</dd>
+            </dl>
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <p class="desc">@Model.Description</p>
+            }
+        </div>
+    </section>
+
+    <aside class="card reserve-card">
+        <h2>Reserve this title</h2>
+        <span class="badge @(Model.Availability > 0 ? "badge-ok" : "badge-out")">@Model.Availability of @Model.TotalCopies @copyWord available</span>
+        <p class="muted">@FullName · Member @MemberId</p>
+        @* ASSUMPTION: a POST action Member/Reserve will exist; it reads the member id from the cookie, never from the form *@
+        <form asp-controller="Member" asp-action="Reserve" method="post">
+            <input type="hidden" name="bookId" value="@Model.BookId" />
+            <button type="submit" class="btn btn-primary">Reserve book →</button>
+        </form>
+    </aside>
+</div>
+
+<section class="card shelf">
+    <h2>Where to find it</h2>
+    @if (!string.IsNullOrWhiteSpace(Model.Shelf))
+    {
+        <p>Shelf location: <strong>@Model.Shelf</strong></p>
+    }
+    else
+    {
+        <p class="muted">No copy is on the shelf right now.</p>
+    }
+</section>
