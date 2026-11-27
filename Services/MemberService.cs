@@ -1,7 +1,9 @@
 ﻿using library.Data;
+using library.Models;
 using library.Services.Interfaces;
 using library.ViewModels.Member;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace library.Services
 {
@@ -105,5 +107,54 @@ namespace library.Services
                 Loans=loans
 			};
 		}
+
+        public async Task<ReservationResult> ReserveAsync(int memberId, int bookId)
+        {
+            var now = DateTime.Now;
+
+            var member = await _context.Users.AsNoTracking()
+                .Where(u => u.UserId == memberId)
+                .Select(u => new { u.Stat, u.RoleId })
+                .FirstOrDefaultAsync();
+            if (member == null || member.Stat != "Active")
+                return ReservationResult.Fail("Your account cannot place reservations.");
+
+            var title = await _context.Books.AsNoTracking()
+                .Where(b => b.BookId == bookId).Select(b => b.Title).FirstOrDefaultAsync();
+            if (title == null)
+                return ReservationResult.Fail("That book does not exist.");
+
+            var alreadyPending = await _context.Reservations.AsNoTracking().AnyAsync(r =>
+                r.UserId == memberId && r.BookId == bookId && r.Stat == ReservationStatus.Pending);
+            if (alreadyPending)
+                return ReservationResult.Fail($"You already have a pending reservation for \"{title}\".");
+
+            var holdDays = await _context.Policies.AsNoTracking()
+                .Where(p => p.RoleId == member.RoleId)
+                .OrderBy(p => p.PolicyId)
+                .Select(p => (int)p.ReservationHoldDays)
+                .FirstOrDefaultAsync();
+            if (holdDays <= 0)
+                return ReservationResult.Fail("Reservations are not available for your membership type.");
+
+            var expires = now.AddDays(holdDays);
+            _context.Reservations.Add(new Reservation
+            {
+                UserId = memberId,
+                BookId = bookId,
+                ReservedAt = now,
+                ExpiresAt = expires,
+                Stat = ReservationStatus.Pending
+            });
+
+            try { await _context.SaveChangesAsync(); }
+            catch (DbUpdateException)      // the unique index caught a simultaneous duplicate
+            {
+                return ReservationResult.Fail($"You already have a pending reservation for \"{title}\".");
+            }
+
+            return ReservationResult.Ok(
+                $"\"{title}\" is reserved until {expires.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)}. A librarian will confirm it.");
+        }
     }
 }

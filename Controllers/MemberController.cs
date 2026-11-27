@@ -29,5 +29,15 @@ namespace library.Controllers
 			var vm = await _memberService.GetMyLoansAsync(memberId, roleId);
             return View(vm);
 		}
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reserve(int bookid)
+        {
+            var memberId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = await _memberService.ReserveAsync(memberId, bookid);
+            TempData[result.Succeeded ? "Success" : "Error"] = result.Message;
+            return RedirectToAction("BookDetails", "Catalog", new { id = bookid });
+
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using library.ViewModels.Member;
+using System.Threading.Tasks;
 
 namespace library.Services.Interfaces
 {
@@ -6,6 +7,7 @@ namespace library.Services.Interfaces
     {
         Task<OverviewViewModel> GetOverviewAsync(int memberId, int roleId);
 		Task<MyLoansViewModel> GetMyLoansAsync(int memberId, int roleId);
+        Task<ReservationResult> ReserveAsync(int memberId, int bookId);
 
-	}
+    }
 }
